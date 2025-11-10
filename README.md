@@ -45,4 +45,47 @@ public class Customer extends User {
         System.out.println("Customer: " + username + ", Address: " + address);
     }
 }
+public class CustomException extends Exception {
+    public CustomException(String message) {
+        super(message);
+    }
+}
+import java.util.*;
+
+public class Order<T extends FoodItem> {
+    private List<T> items = new ArrayList<>();
+
+    public void addItem(T item) {
+        items.add(item);
+    }
+        public void removeItem(int id) throws CustomException {
+        boolean removed = items.removeIf(item -> item.getId() == id);
+        if (!removed) throw new CustomException("Item not found in order!");
+    }
+
+    public double getTotal() {
+        return items.stream().mapToDouble(FoodItem::getPrice).sum();
+    }
+
+    public void showOrder() {
+        items.forEach(System.out::println);
+        System.out.println("Total: ₹" + getTotal());
+    }
+}
+import java.util.*;
+
+public class OrderManager {
+    private Map<Integer, Order<FoodItem>> orders = new HashMap<>();
+    private int orderCount = 0;
+        public synchronized int placeOrder(Order<FoodItem> order) {
+        orders.put(++orderCount, order);
+        return orderCount;
+    }
+    public void viewOrders() {
+        orders.forEach((id, order) -> {
+            System.out.println("Order #" + id);
+            order.showOrder();
+        });
+    }
+}
     
