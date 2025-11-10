@@ -1,0 +1,13 @@
+class OrderProcessor extends Thread {
+    private int orderId;
+
+    public OrderProcessor(int orderId) { this.orderId = orderId; }
+
+    public void run() {
+        System.out.println("Processing Order #" + orderId + "...");
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {}
+        System.out.println("Order #" + orderId + " completed!");
+    }
+}
